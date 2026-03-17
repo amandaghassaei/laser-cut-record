@@ -72,9 +72,14 @@
 </header>
 
 <!-- Main content -->
-<div class="flex flex-1 overflow-hidden">
-	<!-- Sidebar -->
-	<aside class="flex w-80 flex-shrink-0 flex-col gap-4 overflow-y-auto border-r border-border p-4">
+<div class="flex flex-1 flex-col overflow-hidden md:flex-row">
+	<!-- Preview (top on mobile, right on desktop) -->
+	<main class="h-64 shrink-0 md:order-2 md:h-auto md:flex-1 md:min-h-0 md:min-w-0">
+		<PreviewCanvas />
+	</main>
+
+	<!-- Sidebar (below preview on mobile, left on desktop) -->
+	<aside class="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto border-t border-border p-4 md:order-1 md:w-80 md:min-w-80 md:flex-initial md:shrink-0 md:border-t-0 md:border-r">
 		<AudioUploader />
 		{#if grooveResult?.audioTruncated}
 			<div class="flex items-start gap-2 rounded-md border border-yellow-300 bg-yellow-50 p-2.5 text-xs text-yellow-900">
@@ -89,15 +94,10 @@
 		<hr class="border-border" />
 		<ExportButtons />
 	</aside>
-
-	<!-- Preview -->
-	<main class="flex-1 min-h-0">
-		<PreviewCanvas />
-	</main>
 </div>
 
 <!-- Info bar -->
-<footer class="flex items-center gap-6 border-t border-border px-4 py-1.5 text-xs text-muted-foreground">
+<footer class="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border px-4 py-1.5 text-xs text-muted-foreground">
 	{#if grooveResult}
 		<span>Grooves: {grooveResult.numGrooves}</span>
 		<span>Points: {grooveResult.totalPoints.toLocaleString()}</span>

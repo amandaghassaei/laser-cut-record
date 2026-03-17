@@ -6,6 +6,7 @@ export interface SceneContext {
 	scene: THREE.Scene;
 	camera: THREE.OrthographicCamera;
 	controls: MapControls;
+	resetView: () => void;
 	dispose: () => void;
 }
 
@@ -23,12 +24,15 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 	// Record center at (6, 6) for a 12" record; adjust view to show full record.
 	const viewSize = 7;
 	const aspect = width / height;
+	// Fit both axes: for tall viewports, expand vertical to fit horizontal.
+	const viewH = aspect >= 1 ? viewSize : viewSize / aspect;
+	const viewW = aspect >= 1 ? viewSize * aspect : viewSize;
 
 	const camera = new THREE.OrthographicCamera(
-		-viewSize * aspect,
-		viewSize * aspect,
-		viewSize,
-		-viewSize,
+		-viewW,
+		viewW,
+		viewH,
+		-viewH,
 		-10,
 		10
 	);
@@ -63,20 +67,35 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 	}
 	animate();
 
+	/** Compute camera bounds that fit both axes. */
+	function fitCamera(w: number, h: number) {
+		const a = w / h;
+		const vH = a >= 1 ? viewSize : viewSize / a;
+		const vW = a >= 1 ? viewSize * a : viewSize;
+		camera.left = -vW;
+		camera.right = vW;
+		camera.top = vH;
+		camera.bottom = -vH;
+		camera.updateProjectionMatrix();
+	}
+
 	// Resize observer.
 	const resizeObserver = new ResizeObserver(() => {
 		const w = container.clientWidth;
 		const h = container.clientHeight;
 		if (w === 0 || h === 0) return;
-		const a = w / h;
-		camera.left = -viewSize * a;
-		camera.right = viewSize * a;
-		camera.top = viewSize;
-		camera.bottom = -viewSize;
-		camera.updateProjectionMatrix();
+		fitCamera(w, h);
 		renderer.setSize(w, h);
 	});
 	resizeObserver.observe(container);
+
+	function resetView() {
+		camera.position.set(6, 6, 5);
+		camera.zoom = 1;
+		fitCamera(container.clientWidth, container.clientHeight);
+		controls.target.set(6, 6, 0);
+		controls.update();
+	}
 
 	function dispose() {
 		cancelAnimationFrame(animationId);
@@ -85,5 +104,5 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 		renderer.dispose();
 	}
 
-	return { renderer, scene, camera, controls, dispose };
+	return { renderer, scene, camera, controls, resetView, dispose };
 }

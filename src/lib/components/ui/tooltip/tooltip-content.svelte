@@ -23,7 +23,7 @@
 		)}
 		{...restProps}
 	>
-		<TooltipPrimitive.Arrow class="fill-foreground" />
+		<TooltipPrimitive.Arrow class="text-foreground" width={10} height={5} />
 		{@render children?.()}
 	</TooltipPrimitive.Content>
 </TooltipPrimitive.Portal>

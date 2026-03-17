@@ -4,6 +4,8 @@
 	import { updateGrooveMesh } from '$lib/preview/updateGrooveMesh';
 	import { getGrooveResult } from '$lib/stores/grooveStore.svelte';
 	import { paramState } from '$lib/stores/paramStore.svelte';
+	import Maximize from 'lucide-svelte/icons/maximize';
+	import * as Tooltip from '$lib/components/ui/tooltip/index';
 
 	let container: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -26,9 +28,21 @@
 	});
 </script>
 
-<div bind:this={container} class="relative h-full w-full min-h-0">
+<div bind:this={container} class="relative h-full w-full min-h-0 min-w-0 overflow-hidden">
 	<canvas bind:this={canvas} class="block h-full w-full"></canvas>
+	<div class="absolute top-2 right-2">
+		<Tooltip.Root>
+			<Tooltip.Trigger
+				class="rounded bg-black/50 p-1.5 text-white/70 hover:bg-black/70 hover:text-white"
+				onclick={() => sceneCtx?.resetView()}
+			>
+				<Maximize size={14} />
+			</Tooltip.Trigger>
+			<Tooltip.Content side="left">Center view</Tooltip.Content>
+		</Tooltip.Root>
+	</div>
 	<div class="pointer-events-none absolute bottom-2 right-2 rounded bg-black/50 px-2 py-1 text-[10px] text-white/70">
-		Drag to pan · Scroll to zoom
+		<span class="hidden md:inline">Drag to pan · Scroll to zoom</span>
+		<span class="md:hidden">Drag to pan · Pinch to zoom</span>
 	</div>
 </div>
