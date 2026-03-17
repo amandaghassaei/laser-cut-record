@@ -88,7 +88,7 @@
 			<div class="flex items-start gap-2 rounded-md border border-yellow-300 bg-yellow-50 p-2.5 text-xs text-yellow-900">
 				<TriangleAlert size={14} class="mt-0.5 shrink-0" />
 				<p>
-					Audio truncated: {grooveResult.audioDuration.toFixed(1)}s of {grooveResult.totalAudioDuration.toFixed(1)}s fit on the record. To fit more, try lowering the amplitude or spacing, increasing the diameter, shrinking the label radius, or using a faster RPM.
+					Audio truncated: {grooveResult.audioDuration.toFixed(1)}s of {grooveResult.totalAudioDuration.toFixed(1)}s fit on the record. To fit more, try lowering the amplitude or spacing, increasing the diameter, shrinking the label radius, or using a slower RPM.
 				</p>
 			</div>
 		{/if}

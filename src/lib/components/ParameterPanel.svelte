@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { paramState } from '$lib/stores/paramStore.svelte';
+	import { paramState, uiState } from '$lib/stores/paramStore.svelte';
 	import { TOOLTIPS } from '$lib/tooltips';
 	import InfoTooltip from './InfoTooltip.svelte';
 
@@ -136,7 +136,8 @@
 			max="5"
 			step="0.01"
 			value={paramState.labelRadius}
-			oninput={handleNumber('labelRadius')}
+			oninput={(e) => { uiState.editingLabelRadius = true; handleNumber('labelRadius')(e); }}
+			onchange={() => { uiState.editingLabelRadius = false; }}
 			class="w-full"
 		/>
 	</div>

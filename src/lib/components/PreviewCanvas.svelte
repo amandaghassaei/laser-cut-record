@@ -2,8 +2,9 @@
 	import { onMount } from 'svelte';
 	import { createScene, type SceneContext } from '$lib/preview/createScene';
 	import { updateGrooveMesh } from '$lib/preview/updateGrooveMesh';
+	import { updateLabelRadiusIndicator } from '$lib/preview/updateLabelRadiusIndicator';
 	import { getGrooveResult } from '$lib/stores/grooveStore.svelte';
-	import { paramState } from '$lib/stores/paramStore.svelte';
+	import { paramState, uiState } from '$lib/stores/paramStore.svelte';
 	import Maximize from 'lucide-svelte/icons/maximize';
 	import * as Tooltip from '$lib/components/ui/tooltip/index';
 
@@ -25,6 +26,13 @@
 		if (sceneCtx && result) {
 			updateGrooveMesh(sceneCtx.scene, result, paramState.cutLines);
 		}
+	});
+
+	// Show dashed label radius circle while editing.
+	$effect(() => {
+		if (!sceneCtx) return;
+		const center = paramState.diameter / 2;
+		updateLabelRadiusIndicator(sceneCtx.scene, uiState.editingLabelRadius, center, paramState.labelRadius);
 	});
 </script>
 

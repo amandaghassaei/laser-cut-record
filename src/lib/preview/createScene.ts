@@ -46,22 +46,14 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(width, height);
 
-	const controls = new MapControls(camera, renderer.domElement);
-	controls.enableRotate = false;
-	controls.enableZoom = false; // We handle zoom manually for mouse-centered zoom.
-	controls.screenSpacePanning = true;
-	controls.mouseButtons = {
-		LEFT: THREE.MOUSE.PAN,
-		MIDDLE: THREE.MOUSE.PAN,
-		RIGHT: THREE.MOUSE.PAN,
-	};
-	controls.target.set(6, 6, 0);
-	controls.update();
-
-	// Custom mouse-centered zoom.
+	// Custom mouse-centered zoom — registered before MapControls so it fires first.
+	// stopImmediatePropagation prevents MapControls' built-in wheel handler from
+	// double-processing the event, while enableZoom remains true for touch pinch zoom.
+	let controls: MapControls;
 	const zoomSpeed = 0.001;
 	canvas.addEventListener('wheel', (e) => {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		// Get mouse position in normalized device coordinates (-1 to +1).
 		const rect = canvas.getBoundingClientRect();
@@ -89,11 +81,20 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 		controls.update();
 	}, { passive: false });
 
-	// Touch pinch zoom (keep MapControls handling for touch).
+	controls = new MapControls(camera, renderer.domElement);
+	controls.enableRotate = false;
+	controls.screenSpacePanning = true;
+	controls.mouseButtons = {
+		LEFT: THREE.MOUSE.PAN,
+		MIDDLE: THREE.MOUSE.PAN,
+		RIGHT: THREE.MOUSE.PAN,
+	};
 	controls.touches = {
 		ONE: THREE.TOUCH.PAN,
 		TWO: THREE.TOUCH.DOLLY_PAN,
 	};
+	controls.target.set(6, 6, 0);
+	controls.update();
 
 	// Animation loop.
 	let animationId: number;

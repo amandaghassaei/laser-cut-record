@@ -15,3 +15,6 @@ export const DEFAULT_PARAMS: GrooveParams = {
 };
 
 export const paramState = $state<GrooveParams>({ ...DEFAULT_PARAMS });
+
+/** Whether the label radius slider is actively being dragged. */
+export const uiState = $state({ editingLabelRadius: false });
