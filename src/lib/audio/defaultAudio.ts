@@ -1,33 +1,36 @@
 /**
- * Generate a programmatic sine wave for the default audio preview.
- * Produces a 440 Hz tone lasting ~3 seconds with a fade-in/out envelope.
+ * Fetch and decode the bundled example audio clip.
+ * Edison's "Mary Had a Little Lamb" (1927) — the first words ever recorded,
+ * re-enacted by Thomas Edison himself. Public domain.
  *
  * @returns Object with mono Float32Array samples and sample rate.
  */
-export function generateDefaultAudio(): { samples: Float32Array; sampleRate: number } {
-	const sampleRate = 44100;
-	const duration = 3; // seconds
-	const frequency = 440; // Hz
-	const length = sampleRate * duration;
-	const samples = new Float32Array(length);
+export async function loadDefaultAudio(): Promise<{ samples: Float32Array; sampleRate: number }> {
+	const response = await fetch('/example.mp3');
+	const arrayBuffer = await response.arrayBuffer();
+	const audioContext = new AudioContext();
+	try {
+		const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+		const sampleRate = audioBuffer.sampleRate;
+		const numChannels = audioBuffer.numberOfChannels;
+		const length = audioBuffer.length;
 
-	const fadeLength = Math.floor(sampleRate * 0.1); // 100ms fade
-
-	for (let i = 0; i < length; i++) {
-		const t = i / sampleRate;
-		let amplitude = 1.0;
-
-		// Fade in.
-		if (i < fadeLength) {
-			amplitude = i / fadeLength;
+		// Mix down to mono.
+		const mono = new Float32Array(length);
+		for (let ch = 0; ch < numChannels; ch++) {
+			const channelData = audioBuffer.getChannelData(ch);
+			for (let i = 0; i < length; i++) {
+				mono[i] += channelData[i];
+			}
 		}
-		// Fade out.
-		if (i > length - fadeLength) {
-			amplitude = (length - i) / fadeLength;
+		if (numChannels > 1) {
+			for (let i = 0; i < length; i++) {
+				mono[i] /= numChannels;
+			}
 		}
 
-		samples[i] = amplitude * Math.sin(2 * Math.PI * frequency * t);
+		return { samples: mono, sampleRate };
+	} finally {
+		await audioContext.close();
 	}
-
-	return { samples, sampleRate };
 }

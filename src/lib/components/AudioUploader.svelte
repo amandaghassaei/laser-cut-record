@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { decodeAudio } from '$lib/audio/decodeAudio';
-	import { generateDefaultAudio } from '$lib/audio/defaultAudio';
+	import { loadDefaultAudio } from '$lib/audio/defaultAudio';
 	import { audioState } from '$lib/stores/audioStore.svelte';
+	import { TOOLTIPS } from '$lib/tooltips';
+	import InfoTooltip from './InfoTooltip.svelte';
+
+	const EXAMPLE_NAME = 'Edison — "Mary Had a Little Lamb" (1927)';
 
 	let dragOver = $state(false);
 	let loading = $state(false);
@@ -44,22 +48,32 @@
 		if (file) handleFile(file);
 	}
 
-	function loadExample() {
-		const { samples, sampleRate } = generateDefaultAudio();
-		audioState.samples = samples;
-		audioState.sampleRate = sampleRate;
-		audioState.fileName = 'Example (440 Hz sine)';
+	async function loadExample() {
+		error = '';
+		loading = true;
+		try {
+			const { samples, sampleRate } = await loadDefaultAudio();
+			audioState.samples = samples;
+			audioState.sampleRate = sampleRate;
+			audioState.fileName = EXAMPLE_NAME;
+		} catch (e) {
+			error = `Failed to load example: ${e instanceof Error ? e.message : 'Unknown error'}`;
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 
 <div class="space-y-3">
-	<h3 class="text-sm font-semibold">Audio</h3>
+	<div class="flex items-center gap-1">
+		<h3 class="text-sm font-semibold">Audio</h3>
+		<InfoTooltip text={TOOLTIPS.audio} />
+	</div>
 
 	<!-- Drop zone -->
 	<div
 		role="button"
 		tabindex="0"
-		title="Upload an audio file to engrave into the record groove. The audio is decoded to mono and mapped onto the spiral. Shorter clips work best — long files may produce very dense geometry."
 		class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-4 text-center text-sm transition-colors
 			{dragOver ? 'border-primary bg-accent' : 'border-border hover:border-primary/50'}"
 		ondrop={onDrop}

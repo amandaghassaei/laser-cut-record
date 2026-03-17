@@ -8,10 +8,10 @@ export interface GrooveParams {
 	diameter: number;
 	/** Center hole diameter in inches. */
 	innerHole: number;
-	/** Innermost groove radius in inches. */
-	innerRad: number;
-	/** Outermost groove radius in inches. */
-	outerRad: number;
+	/** Radius of the label area / innermost groove in inches. */
+	labelRadius: number;
+	/** Distance from the outer edge to the first groove in inches. */
+	grooveMargin: number;
 	/** Groove modulation amplitude in DPI pixels. */
 	amplitude: number;
 	/** Inter-groove spacing in DPI pixels. */

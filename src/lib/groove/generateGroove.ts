@@ -16,7 +16,11 @@ export function generateGroove(
 	samples: Float32Array,
 	sampleRate: number
 ): GrooveResult {
-	const { rpm, diameter, innerHole, innerRad, outerRad, amplitude, spacing, minDist, thetaIter, dpi, cutLines } = params;
+	const { rpm, diameter, innerHole, labelRadius, grooveMargin, amplitude, spacing, minDist, thetaIter, dpi, cutLines } = params;
+
+	// Compute derived radii.
+	const outerRad = diameter / 2 - grooveMargin;
+	const innerRad = labelRadius;
 
 	// Convert DPI-pixel values to inches.
 	const amplitudeInches = amplitude / dpi;

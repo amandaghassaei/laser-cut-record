@@ -31,7 +31,6 @@
 	<div class="flex gap-2">
 		<button
 			class="flex-1 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-			title="Download the groove as a vector SVG file. Can be opened in Inkscape or a browser for inspection."
 			onclick={handleExportSVG}
 			{disabled}
 		>
@@ -39,7 +38,6 @@
 		</button>
 		<button
 			class="flex-1 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-			title="Download the groove as a vector PDF file, ready to send to a laser cutter."
 			onclick={handleExportPDF}
 			disabled={disabled || exporting}
 		>

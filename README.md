@@ -1,42 +1,34 @@
-# sv
+# Laser Cut Record
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A browser-based tool for generating laser-cuttable vinyl records from audio files. Upload an audio file, adjust groove parameters to match your laser cutter, preview the result in real time, and export as SVG or PDF for cutting.
 
-## Creating a project
+This project is a web-based reimagining of the original [Laser Cut Record Instructables post](https://www.instructables.com/Laser-Cut-Record/) by [Amanda Ghassaei](https://amandaghassaei.com), which used Python and Processing scripts to generate vector files for laser cutting playable records. This app combines both steps into a single client-side tool with a live preview.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- Decode audio files (MP3, WAV, OGG, FLAC) directly in the browser
+- Adjustable groove parameters: RPM, amplitude, spacing, DPI, dimensions, and more
+- Real-time 2D preview with pan and zoom (Three.js)
+- Export as vector SVG or PDF, ready to send to a laser cutter
+- Fully client-side — no server required, all processing happens in your browser
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.12.7 create --template minimal --types ts --no-install .
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Getting Started
 
 ```sh
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
+
+Then open `http://localhost:5173` in your browser.
 
 ## Building
-
-To create a production version of your app:
 
 ```sh
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+The production build is output to `build/` as a static site (no server needed).
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Disclaimer
+
+This project was vibe coded with [Claude Code](https://claude.ai) and may contain bugs or inaccuracies. If you run into any issues, please [open an issue](https://github.com/amandaghassaei/laser-cut-record/issues) or submit a pull request on the [GitHub repo](https://github.com/amandaghassaei/laser-cut-record).
