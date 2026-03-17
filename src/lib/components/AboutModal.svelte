@@ -53,6 +53,21 @@
 				All processing runs entirely in your browser — your audio files never leave your
 				computer and nothing is uploaded to a server.
 			</p>
+
+			<p>
+				The included example audio is Thomas Edison's 1927 re-enactment of
+				"Mary Had a Little Lamb" — the first words ever recorded on a phonograph, originally
+				demonstrated in 1877.
+			</p>
+
+			<p>
+				Source code available on <a
+					href="https://github.com/amandaghassaei/laser-cut-record"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="font-medium underline underline-offset-4 hover:text-foreground"
+				>GitHub</a>.
+			</p>
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
