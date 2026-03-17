@@ -11,7 +11,7 @@ const PTS_PER_INCH = 72;
  * @param result - The groove generation result.
  * @param showCutLines - Whether to include cut perimeter circles.
  */
-export async function exportPDF(result: GrooveResult, showCutLines: boolean): Promise<void> {
+export async function exportPDF(result: GrooveResult, showCutLines: boolean, baseName: string): Promise<void> {
 	const diameter = result.outerCircle.r * 2;
 	const pageSizePts = diameter * PTS_PER_INCH;
 
@@ -70,7 +70,7 @@ export async function exportPDF(result: GrooveResult, showCutLines: boolean): Pr
 	}
 
 	const pdfBytes = await pdfDoc.save();
-	downloadBlob(new Blob([pdfBytes as BlobPart], { type: 'application/pdf' }), 'laser-cut-record.pdf');
+	downloadBlob(new Blob([pdfBytes as BlobPart], { type: 'application/pdf' }), `${baseName}.pdf`);
 }
 
 function downloadBlob(blob: Blob, filename: string) {

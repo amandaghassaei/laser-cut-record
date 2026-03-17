@@ -1,7 +1,7 @@
 import type { GrooveParams } from '$lib/groove/types';
 
 export const DEFAULT_PARAMS: GrooveParams = {
-	rpm: 33.3,
+	rpm: 45,
 	diameter: 11.8,
 	innerHole: 0.286,
 	labelRadius: 2.25,

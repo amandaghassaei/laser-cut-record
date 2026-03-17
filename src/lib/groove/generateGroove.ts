@@ -129,8 +129,10 @@ export function generateGroove(
 		theta += incrNum;
 	}
 
-	// Compute audio duration used.
+	// Compute audio duration used vs. total available.
 	const audioDuration = audioIndex / sampleRate;
+	const totalAudioDuration = samples.length / sampleRate;
+	const audioTruncated = audioIndex < samples.length;
 
 	return {
 		groovePoints,
@@ -138,6 +140,8 @@ export function generateGroove(
 		outerCircle: { cx, cy, r: diameter / 2 },
 		numGrooves,
 		audioDuration,
+		totalAudioDuration,
+		audioTruncated,
 		totalPoints: groovePoints.length,
 	};
 }

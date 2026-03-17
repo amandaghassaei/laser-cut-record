@@ -5,9 +5,9 @@
 
 export const TOOLTIPS = {
 	audio:
-		'Upload an audio file to engrave into the record groove. The audio is decoded to mono and mapped onto the spiral. Shorter clips work best — long files may produce very dense geometry.',
+		'Upload an audio file to engrave into the record groove. The audio is decoded to mono and mapped onto the spiral.',
 	rpm:
-		'Playback speed of the record. Standard vinyl speeds are 33.3 (LP), 45 (single), and 78 (shellac).',
+		'Playback speed of the record. Standard vinyl speeds are 33.3, 45, and 78. Faster speeds produce higher quality results, but less audio can fit on the record.',
 	dpi:
 		'Resolution of your laser cutter in dots per inch. Amplitude and spacing are specified in pixels at this DPI.',
 	diameter:
@@ -17,7 +17,7 @@ export const TOOLTIPS = {
 	grooveMargin:
 		'Distance from the outer edge of the record to where the first groove begins. A small margin prevents grooves from running right up to the cut edge.',
 	labelRadius:
-		'Radius of the label area at the center of the record. The groove spiral works inward and stops here.',
+		'Radius of the label area at the center of the record. The groove spiral works inward and stops here. A larger label radius may truncate the audio if the grooves run out of space.',
 	amplitude:
 		'Peak amplitude of the audio-modulated groove in pixels at the selected DPI. Higher values produce louder playback but require more spacing between grooves.',
 	spacing:

@@ -48,6 +48,10 @@ export interface GrooveResult {
 	numGrooves: number;
 	/** Audio duration used in seconds. */
 	audioDuration: number;
+	/** Total audio duration available in seconds. */
+	totalAudioDuration: number;
+	/** Whether the audio was truncated due to insufficient groove space. */
+	audioTruncated: boolean;
 	/** Total number of points in the groove. */
 	totalPoints: number;
 }

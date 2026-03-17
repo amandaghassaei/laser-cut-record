@@ -45,6 +45,12 @@ export function createScene(canvas: HTMLCanvasElement, container: HTMLElement): 
 	const controls = new MapControls(camera, renderer.domElement);
 	controls.enableRotate = false;
 	controls.screenSpacePanning = true;
+	// Map right-click to pan (same as left-click).
+	controls.mouseButtons = {
+		LEFT: THREE.MOUSE.PAN,
+		MIDDLE: THREE.MOUSE.DOLLY,
+		RIGHT: THREE.MOUSE.PAN,
+	};
 	controls.target.set(6, 6, 0);
 	controls.update();
 

@@ -4,16 +4,23 @@
 	import { audioState } from '$lib/stores/audioStore.svelte';
 	import { TOOLTIPS } from '$lib/tooltips';
 	import InfoTooltip from './InfoTooltip.svelte';
+	import Play from 'lucide-svelte/icons/play';
+	import Square from 'lucide-svelte/icons/square';
+	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
 	const EXAMPLE_NAME = 'Edison — "Mary Had a Little Lamb" (1927)';
 
 	let dragOver = $state(false);
 	let loading = $state(false);
 	let error = $state('');
+	let playing = $state(false);
+	let audioCtx: AudioContext | null = null;
+	let sourceNode: AudioBufferSourceNode | null = null;
 
 	async function handleFile(file: File) {
 		error = '';
 		loading = true;
+		stopPlayback();
 		try {
 			const { samples, sampleRate } = await decodeAudio(file);
 			audioState.samples = samples;
@@ -51,6 +58,7 @@
 	async function loadExample() {
 		error = '';
 		loading = true;
+		stopPlayback();
 		try {
 			const { samples, sampleRate } = await loadDefaultAudio();
 			audioState.samples = samples;
@@ -61,6 +69,43 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	function stopPlayback() {
+		if (sourceNode) {
+			sourceNode.onended = null;
+			sourceNode.stop();
+			sourceNode.disconnect();
+			sourceNode = null;
+		}
+		if (audioCtx) {
+			audioCtx.close();
+			audioCtx = null;
+		}
+		playing = false;
+	}
+
+	function togglePlayback() {
+		if (playing) {
+			stopPlayback();
+			return;
+		}
+
+		const samples = audioState.samples;
+		if (!samples) return;
+
+		audioCtx = new AudioContext();
+		const buffer = audioCtx.createBuffer(1, samples.length, audioState.sampleRate);
+		buffer.getChannelData(0).set(samples);
+
+		sourceNode = audioCtx.createBufferSource();
+		sourceNode.buffer = buffer;
+		sourceNode.connect(audioCtx.destination);
+		sourceNode.onended = () => {
+			stopPlayback();
+		};
+		sourceNode.start();
+		playing = true;
 	}
 </script>
 
@@ -81,7 +126,10 @@
 		ondragleave={onDragLeave}
 	>
 		{#if loading}
-			<p class="text-muted-foreground">Decoding audio...</p>
+			<div class="flex items-center gap-2 text-muted-foreground">
+				<LoaderCircle size={16} class="animate-spin" />
+				<p>Decoding audio...</p>
+			</div>
 		{:else}
 			<p class="text-muted-foreground">Drop audio file here</p>
 			<p class="text-xs text-muted-foreground">MP3, WAV, OGG, FLAC</p>
@@ -103,9 +151,29 @@
 	</div>
 
 	{#if audioState.fileName}
-		<p class="truncate text-xs text-muted-foreground" title={audioState.fileName}>
-			{audioState.fileName}
-		</p>
+		<div class="space-y-1">
+			<p class="text-xs font-medium text-muted-foreground">Currently loaded:</p>
+			<div class="flex items-center gap-1.5">
+				<button
+					class="shrink-0 rounded p-0.5 text-muted-foreground hover:text-foreground"
+					onclick={togglePlayback}
+				>
+					{#if playing}
+						<Square size={14} />
+					{:else}
+						<Play size={14} />
+					{/if}
+				</button>
+				<p class="truncate text-xs text-muted-foreground" title={audioState.fileName}>
+					{audioState.fileName}
+				</p>
+			</div>
+			{#if audioState.samples}
+				<p class="text-[11px] text-muted-foreground/70">
+					{(audioState.samples.length / audioState.sampleRate).toFixed(1)}s · {(audioState.sampleRate / 1000).toFixed(1)} kHz · {(audioState.samples.length).toLocaleString()} samples
+				</p>
+			{/if}
+		</div>
 	{/if}
 
 	{#if error}

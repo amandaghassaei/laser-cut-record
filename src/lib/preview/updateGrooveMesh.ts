@@ -53,7 +53,7 @@ export function updateGrooveMesh(
 	}
 	const grooveGeometry = new THREE.BufferGeometry();
 	grooveGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-	const grooveMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+	const grooveMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
 	const grooveLine = new THREE.Line(grooveGeometry, grooveMaterial);
 	grooveLine.name = GROOVE_LINE_NAME;
 	scene.add(grooveLine);
@@ -67,7 +67,7 @@ export function updateGrooveMesh(
 		innerCircleGeom.dispose();
 		const innerCircleLine = new THREE.LineLoop(
 			innerEdgeGeom,
-			new THREE.LineBasicMaterial({ color: 0xff0000 })
+			new THREE.LineBasicMaterial({ color: 0x000000 })
 		);
 		innerCircleLine.position.set(
 			result.innerCircle.cx,
@@ -83,7 +83,7 @@ export function updateGrooveMesh(
 		outerCircleGeom.dispose();
 		const outerCircleLine = new THREE.LineLoop(
 			outerEdgeGeom,
-			new THREE.LineBasicMaterial({ color: 0xff0000 })
+			new THREE.LineBasicMaterial({ color: 0x000000 })
 		);
 		outerCircleLine.position.set(
 			result.outerCircle.cx,

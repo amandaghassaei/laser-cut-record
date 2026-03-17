@@ -6,7 +6,7 @@ import type { GrooveResult } from '$lib/groove/types';
  * @param result - The groove generation result.
  * @param showCutLines - Whether to include cut perimeter circles.
  */
-export function exportSVG(result: GrooveResult, showCutLines: boolean): void {
+export function exportSVG(result: GrooveResult, showCutLines: boolean, baseName: string): void {
 	const diameter = result.outerCircle.r * 2;
 	const strokeWidth = 0.001; // Hairline stroke in inches.
 
@@ -29,7 +29,7 @@ export function exportSVG(result: GrooveResult, showCutLines: boolean): void {
 
 	svg += `</svg>`;
 
-	downloadBlob(new Blob([svg], { type: 'image/svg+xml' }), 'laser-cut-record.svg');
+	downloadBlob(new Blob([svg], { type: 'image/svg+xml' }), `${baseName}.svg`);
 }
 
 function downloadBlob(blob: Blob, filename: string) {

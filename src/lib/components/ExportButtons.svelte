@@ -3,13 +3,20 @@
 	import { exportPDF } from '$lib/export/exportPDF';
 	import { getGrooveResult } from '$lib/stores/grooveStore.svelte';
 	import { paramState } from '$lib/stores/paramStore.svelte';
+	import { audioState } from '$lib/stores/audioStore.svelte';
 
 	let exporting = $state(false);
+
+	/** Strip file extension from the audio file name to use as the export base name. */
+	function getBaseName(): string {
+		const name = audioState.fileName || 'laser-cut-record';
+		return name.replace(/\.[^.]+$/, '');
+	}
 
 	function handleExportSVG() {
 		const result = getGrooveResult();
 		if (!result) return;
-		exportSVG(result, paramState.cutLines);
+		exportSVG(result, paramState.cutLines, getBaseName());
 	}
 
 	async function handleExportPDF() {
@@ -17,7 +24,7 @@
 		if (!result) return;
 		exporting = true;
 		try {
-			await exportPDF(result, paramState.cutLines);
+			await exportPDF(result, paramState.cutLines, getBaseName());
 		} finally {
 			exporting = false;
 		}

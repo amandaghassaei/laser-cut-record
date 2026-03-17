@@ -28,4 +28,7 @@
 
 <div bind:this={container} class="relative h-full w-full min-h-0">
 	<canvas bind:this={canvas} class="block h-full w-full"></canvas>
+	<div class="pointer-events-none absolute bottom-2 right-2 rounded bg-black/50 px-2 py-1 text-[10px] text-white/70">
+		Drag to pan · Scroll to zoom
+	</div>
 </div>
