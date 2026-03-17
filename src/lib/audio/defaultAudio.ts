@@ -6,7 +6,8 @@
  * @returns Object with mono Float32Array samples and sample rate.
  */
 export async function loadDefaultAudio(): Promise<{ samples: Float32Array; sampleRate: number }> {
-	const response = await fetch('/example.mp3');
+	const { base } = await import('$app/paths');
+	const response = await fetch(`${base}/example.mp3`);
 	const arrayBuffer = await response.arrayBuffer();
 	const audioContext = new AudioContext();
 	try {
