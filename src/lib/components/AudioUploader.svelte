@@ -11,7 +11,6 @@
 	const EXAMPLE_NAME = 'Edison — "Mary Had a Little Lamb" (1927)';
 
 	let dragOver = $state(false);
-	let loading = $state(false);
 	let error = $state('');
 	let playing = $state(false);
 	let audioCtx: AudioContext | null = null;
@@ -19,7 +18,7 @@
 
 	async function handleFile(file: File) {
 		error = '';
-		loading = true;
+		audioState.loading = true;
 		stopPlayback();
 		try {
 			const { samples, sampleRate } = await decodeAudio(file);
@@ -29,7 +28,7 @@
 		} catch (e) {
 			error = `Failed to decode audio: ${e instanceof Error ? e.message : 'Unknown error'}`;
 		} finally {
-			loading = false;
+			audioState.loading = false;
 		}
 	}
 
@@ -57,7 +56,7 @@
 
 	async function loadExample() {
 		error = '';
-		loading = true;
+		audioState.loading = true;
 		stopPlayback();
 		try {
 			const { samples, sampleRate } = await loadDefaultAudio();
@@ -67,7 +66,7 @@
 		} catch (e) {
 			error = `Failed to load example: ${e instanceof Error ? e.message : 'Unknown error'}`;
 		} finally {
-			loading = false;
+			audioState.loading = false;
 		}
 	}
 
@@ -125,7 +124,7 @@
 		ondragover={onDragOver}
 		ondragleave={onDragLeave}
 	>
-		{#if loading}
+		{#if audioState.loading}
 			<div class="flex items-center gap-2 text-muted-foreground">
 				<LoaderCircle size={16} class="animate-spin" />
 				<p>Decoding audio...</p>

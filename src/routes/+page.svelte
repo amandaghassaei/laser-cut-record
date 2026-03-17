@@ -30,13 +30,16 @@
 		e.preventDefault();
 		const file = e.dataTransfer?.files[0];
 		if (!file || !file.type.startsWith('audio/')) return;
+		audioState.loading = true;
 		try {
 			const { samples, sampleRate } = await decodeAudio(file);
 			audioState.samples = samples;
 			audioState.sampleRate = sampleRate;
 			audioState.fileName = file.name;
 		} catch {
-			// Handled by AudioUploader's error state if dropped there directly.
+			// Silently fail for global drops.
+		} finally {
+			audioState.loading = false;
 		}
 	}
 </script>
@@ -85,7 +88,7 @@
 			<div class="flex items-start gap-2 rounded-md border border-yellow-300 bg-yellow-50 p-2.5 text-xs text-yellow-900">
 				<TriangleAlert size={14} class="mt-0.5 shrink-0" />
 				<p>
-					Audio truncated: {grooveResult.audioDuration.toFixed(1)}s of {grooveResult.totalAudioDuration.toFixed(1)}s fit on the record. Adjust groove spacing, RPM, or record size to fit more.
+					Audio truncated: {grooveResult.audioDuration.toFixed(1)}s of {grooveResult.totalAudioDuration.toFixed(1)}s fit on the record. To fit more, try lowering the amplitude or spacing, increasing the diameter, shrinking the label radius, or using a faster RPM.
 				</p>
 			</div>
 		{/if}
